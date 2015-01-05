@@ -27,7 +27,7 @@ module.exports = {
     dest: dest + '/images'
   },
   markup: {
-    src: src + '/htdocs/**/*.*',
+    src: src + '/htdocs/**/*.html',
     dest: dest
   },
   browserify: {
@@ -46,13 +46,11 @@ module.exports = {
     }, {
       dest: dest + '/scripts',
       outputName: 'vendors.js',
-      debug: true,
       require: dependencies
     }]
   },
   production: {
-    cssSrc: dest + '/*.css',
-    jsSrc: dest + '/*.js',
-    dest: dest
+    htmlSrc: dest + '/**/*.html',
+    dest: dist
   }
 }
