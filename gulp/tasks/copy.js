@@ -17,7 +17,7 @@ var copyTasks = _.map(config, function (cfg, key) {
     }
     return gulp.src(cfg.src)
       .pipe(gulp.dest(dest))
-    //.pipe(browserSync.reload({stream: true}))
+      .pipe(browserSync.reload({stream: true}))
   })
 
   return taskName

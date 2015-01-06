@@ -7,7 +7,6 @@ gulp.task('combine', ['build', 'browserify'], function() {
   var assets = $.useref.assets()
 
   return gulp.src(config.htmlSrc)
-    // Report compile errors
     .on('error', handleErrors)
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
