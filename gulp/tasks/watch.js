@@ -6,8 +6,15 @@
 var gulp = require('gulp')
 var config = require('../config')
 var watchify = require('./browserify')
+var browserSync = require('browser-sync')
+var _ = require('lodash')
 
 gulp.task('watch', ['watchify', 'browserSync'], function () {
+  var copySrcs = _.flatten(_.map(config.copy, function (cfg) {
+    return cfg.src
+  }))
+  gulp.watch(copySrcs, ['copy'])
+
   gulp.watch(config.sass.src, ['styles'])
   gulp.watch(config.images.src, ['images'])
   gulp.watch(config.markup.src, ['markup'])
