@@ -8,7 +8,8 @@ var source = require('vinyl-source-stream')
 var config = require('../config').browserify
 var _ = require('lodash')
 
-var browserifyTask = function (callback, devMode) {
+var browserifyTask = function (callback) {
+  var devMode = process.env.NODE_ENV !== 'production'
   var bundleQueue = config.bundleConfigs.length
 
   var browserifyThis = function (bundleConfig) {

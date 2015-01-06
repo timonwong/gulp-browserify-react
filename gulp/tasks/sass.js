@@ -6,11 +6,13 @@ var browserSync = require('browser-sync')
 
 
 gulp.task('sass', function () {
+  var devMode = process.env.NODE_ENV !== 'production'
+
   return gulp.src(config.src)
     .on('error', handleErrors)
-    .pipe($.if(global.devMode, $.sourcemaps.init()))
+    .pipe($.if(devMode, $.sourcemaps.init()))
     .pipe($.sass(config.settings))
-    .pipe($.if(global.devMode, $.sourcemaps.write()))
+    .pipe($.if(devMode, $.sourcemaps.write()))
     .pipe($.autoprefixer({browsers: ['last 2 versions']}))
     .pipe(gulp.dest(config.dest))
     .pipe(browserSync.reload({stream: true}))

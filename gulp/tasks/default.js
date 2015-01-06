@@ -1,3 +1,3 @@
 var gulp = require('gulp')
 
-gulp.task('default', ['setDevMode', 'build', 'watch'])
+gulp.task('default', ['build', 'watch'])

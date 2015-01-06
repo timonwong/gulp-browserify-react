@@ -63,7 +63,10 @@ module.exports = {
     bundleConfigs: [{
       entries: src + '/app/main',
       dest: destAssets,
-      transform: ['reactify'],
+      transform: [
+        ['envify'],
+        ['reactify', {harmony: true}]
+      ],
       outputName: 'app.js',
       // Additional file extensions to make optional
       extensions: ['.js', '.jsx'],
@@ -72,6 +75,9 @@ module.exports = {
       external: dependencies
     }, {
       dest: destAssets,
+      transform: [
+        'envify'
+      ],
       outputName: 'vendors.js',
       require: dependencies
     }]
