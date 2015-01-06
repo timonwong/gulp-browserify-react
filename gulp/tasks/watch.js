@@ -13,10 +13,10 @@ gulp.task('watch', ['watchify', 'browserSync'], function () {
   var copySrcs = _.flatten(_.map(config.copy, function (cfg) {
     return cfg.src
   }))
-  gulp.watch(copySrcs, ['copy'])
+  gulp.watch(copySrcs, ['copy', browserSync.reload])
 
-  gulp.watch(config.sass.src, ['styles'])
-  gulp.watch(config.images.src, ['images'])
-  gulp.watch(config.markup.src, ['markup'])
+  gulp.watch(config.sass.src, ['styles', browserSync.reload])
+  gulp.watch(config.images.src, ['images', browserSync.reload])
+  gulp.watch(config.markup.src, ['markup', browserSync.reload])
   // Watchify will watch and recompile our JS, so no need to gulp.watch it
 })

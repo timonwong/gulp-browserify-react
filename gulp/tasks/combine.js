@@ -1,11 +1,14 @@
 var gulp = require('gulp')
 var $ = require('gulp-load-plugins')()
 var config = require('../config').production
+var handleErrors = require('../util/handleErrors')
 
-gulp.task('combine', ['browserify'], function() {
+gulp.task('combine', ['build', 'browserify'], function() {
   var assets = $.useref.assets()
 
   return gulp.src(config.htmlSrc)
+    // Report compile errors
+    .on('error', handleErrors)
     .pipe(assets)
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.js', $.size({title: 'Combined JS'})))

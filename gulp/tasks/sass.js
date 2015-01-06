@@ -13,5 +13,5 @@ gulp.task('sass', function () {
     .pipe($.if(global.devMode, $.sourcemaps.write()))
     .pipe($.autoprefixer({browsers: ['last 2 versions']}))
     .pipe(gulp.dest(config.dest))
-    .pipe(browserSync.reload({stream: true}))
+    //.pipe(browserSync.reload({stream: true}))
 })

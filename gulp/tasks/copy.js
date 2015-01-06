@@ -1,25 +1,26 @@
 var gulp = require('gulp')
 var config = require('../config').copy
-var merge = require('merge-stream')
 var _ = require('lodash')
 var browserSync = require('browser-sync')
 
-
-gulp.task('copy', function () {
-  var streams = []
-  _.values(config).forEach(function (cfg) {
+var copyTasks = _.map(config, function (cfg, key) {
+  // Create task name
+  var taskName = '__task_copy_' + key
+  // Create actual task
+  gulp.task(taskName, function () {
+    // Create actual task
     var dest
     if (global.devMode) {
       dest = cfg.dest.devMode || cfg.dest
     } else {
       dest = cfg.dest.production || cfg.dest
     }
-
-    var stream = gulp.src(cfg.src)
+    return gulp.src(cfg.src)
       .pipe(gulp.dest(dest))
-      .pipe(browserSync.reload({stream: true}))
-
-    streams.push(stream)
+    //.pipe(browserSync.reload({stream: true}))
   })
-  return merge.apply(this, streams)
+
+  return taskName
 })
+
+gulp.task('copy', copyTasks)
