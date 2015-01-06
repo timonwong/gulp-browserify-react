@@ -1,4 +1,4 @@
 var gulp = require('gulp')
 
 // Run this to compress all the things
-gulp.task('production', ['sass-production', 'images', 'markup', 'combine'])
+gulp.task('production', ['copy', 'sass', 'images', 'markup', 'combine'])

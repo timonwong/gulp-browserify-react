@@ -5,21 +5,13 @@ var handleErrors = require('../util/handleErrors')
 var browserSync = require('browser-sync')
 
 
-var sassTask = function(callback, devMode) {
+gulp.task('sass', function () {
   return gulp.src(config.src)
-    .pipe($.if(devMode, $.sourcemaps.init()))
+    .pipe($.if(global.devMode, $.sourcemaps.init()))
     .pipe($.sass(config.settings))
     .on('error', handleErrors)
-    .pipe($.if(devMode, $.sourcemaps.write()))
+    .pipe($.if(global.devMode, $.sourcemaps.write()))
     .pipe($.autoprefixer({browsers: ['last 2 versions']}))
     .pipe(gulp.dest(config.dest))
     .pipe(browserSync.reload({stream: true}))
-}
-
-gulp.task('sass', function (callback) {
-  sassTask(callback, true)
-})
-
-gulp.task('sass-production', function (callback) {
-  sassTask(callback, false)
 })

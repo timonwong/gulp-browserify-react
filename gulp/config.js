@@ -1,8 +1,19 @@
+var path = require('path')
+
 var dest = './build'
 var dist = './dist'
 var src = './src'
 
-var dependencies = ['react']
+var destAssets = path.join(dest, 'assets')
+var destVendors = path.join(destAssets, 'vendors')
+var destImages = path.join(destAssets, 'images')
+
+var distVendors = path.join(dist, 'assets', 'vendors')
+
+var nodeModules = './node_modules'
+var bowerComponents = path.join(src, 'app/bower_components')
+
+var dependencies = ['react', 'react-bootstrap']
 
 module.exports = {
   browserSync: {
@@ -11,23 +22,39 @@ module.exports = {
       baseDir: dest
     }
   },
+  copy: {
+    bootstrap: {
+      src: [bowerComponents + '/bootstrap/dist/**/*.*'],
+      dest: {
+        devMode: destVendors,
+        production: distVendors
+      }
+    },
+    flatUi: {
+      src: [bowerComponents + '/flat-ui/dist/**/*.*'],
+      dest: {
+        devMode: destVendors,
+        production: distVendors
+      }
+    }
+  },
   sass: {
     src: src + '/sass/**/*.{sass,scss}',
-    dest: dest + '/styles',
+    dest: destAssets,
     settings: {
       // Required if you want to use SASS syntax
       // See https://github.com/dlmanning/gulp-sass/issues/81
       sourceComments: 'map',
-      includePaths: ['/bower_components'],
-      imagePath: '/images' // Used by the image-url helper
+      includePaths: [bowerComponents],
+      imagePath: '/assets/images' // Used by the image-url helper
     }
   },
   images: {
     src: src + '/images/**/*.*',
-    dest: dest + '/images'
+    dest: destImages
   },
   markup: {
-    src: src + '/htdocs/**/*.html',
+    src: src + '/htdocs/*.html',
     dest: dest
   },
   browserify: {
@@ -35,7 +62,7 @@ module.exports = {
     // bundle config in the list below
     bundleConfigs: [{
       entries: src + '/app/main',
-      dest: dest + '/scripts',
+      dest: destAssets,
       transform: ['reactify'],
       outputName: 'app.js',
       // Additional file extensions to make optional
@@ -44,13 +71,13 @@ module.exports = {
       require: [],
       external: dependencies
     }, {
-      dest: dest + '/scripts',
+      dest: destAssets,
       outputName: 'vendors.js',
       require: dependencies
     }]
   },
   production: {
-    htmlSrc: dest + '/**/*.html',
+    htmlSrc: dest + '/*.html',
     dest: dist
   }
 }

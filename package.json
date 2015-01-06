@@ -4,7 +4,7 @@
   "description": "gulp browserify reactjs template",
   "dependencies": {
     "react": "^0.12.2",
-    "semantic-ui": "^1.5.2"
+    "react-bootstrap": "^0.13.0"
   },
   "devDependencies": {
     "browser-sync": "^1.8.3",
@@ -26,6 +26,7 @@
     "gulp-useref": "^1.1.0",
     "gulp-util": "^3.0.1",
     "lodash": "^2.4.1",
+    "merge-stream": "^0.1.6",
     "pretty-hrtime": "^1.0.0",
     "reactify": "^0.17.1",
     "require-dir": "^0.1.0",
