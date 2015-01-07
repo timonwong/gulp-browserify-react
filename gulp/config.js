@@ -11,7 +11,7 @@ var destImages = path.join(destAssets, 'images')
 var distVendors = path.join(dist, 'assets', 'vendors')
 
 var nodeModules = './node_modules'
-var bowerComponents = path.join(src, 'app/bower_components')
+var bowerComponents = path.join(src, 'bower_components')
 
 var dependencies = ['react', 'react-router', 'react-bootstrap', 'react-router-bootstrap']
 
@@ -25,13 +25,6 @@ module.exports = {
   copy: {
     bootstrap: {
       src: [bowerComponents + '/bootstrap/dist/**/*.*'],
-      dest: {
-        devMode: destVendors,
-        production: distVendors
-      }
-    },
-    flatUi: {
-      src: [bowerComponents + '/flat-ui/dist/**/*.*'],
       dest: {
         devMode: destVendors,
         production: distVendors
