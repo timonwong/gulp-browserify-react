@@ -46,21 +46,24 @@ var browserifyTask = function (callback) {
       if (devMode) {
         var jsRoot = path.resolve('.')
         var mapFilePath = path.join(bundleConfig.dest, bundleConfig.outputName + '.map')
-        var mapFileUrlCommentSync = function(sourcemap) {
-          // Because reactify returns transformed sourcemap, here we add the hack to get around of it
-          // Note that this should be used with symlink task
-          sourcemap.sourceRoot('/')
-          sourcemap.mapSources(mold.mapPathRelativeTo(jsRoot))
-          sourcemap.file(bundleConfig.outputName)
-          // Exclude sourcesContent, because we don't need it anymore
-          sourcemap.sourcemap.setProperty('sourcesContent', undefined)
+        var mapFileUrlCommentSync = function (sourcemap) {
+          try {
+            // Because reactify returns transformed sourcemap, here we add the hack to get around of it
+            // Note that this should be used with symlink task
+            sourcemap.sourceRoot('/')
+            sourcemap.mapSources(mold.mapPathRelativeTo(jsRoot))
+            sourcemap.file(bundleConfig.outputName)
+            // Exclude sourcesContent, because we don't need it anymore
+            sourcemap.sourcemap.setProperty('sourcesContent', undefined)
 
-          // write map file and return a sourceMappingUrl that points to it
-          fs.writeFileSync(mapFilePath, sourcemap.toJSON(2), 'utf-8')
-          // Giving just a filename instead of a path will cause the browser to look for the map file
-          // right next to where it loaded the bundle from.
-          // Therefore this way the map is found no matter if the page is served or opened from the filesystem.
-          return '//@ sourceMappingURL=' + path.basename(mapFilePath)
+            // write map file and return a sourceMappingUrl that points to it
+            fs.writeFileSync(mapFilePath, sourcemap.toJSON(2), 'utf-8')
+            // Giving just a filename instead of a path will cause the browser to look for the map file
+            // right next to where it loaded the bundle from.
+            // Therefore this way the map is found no matter if the page is served or opened from the filesystem.
+            return '//@ sourceMappingURL=' + path.basename(mapFilePath)
+          } catch (e) {
+          }
         }
 
         bundleStream = bundleStream.pipe(mold.transform(mapFileUrlCommentSync))
