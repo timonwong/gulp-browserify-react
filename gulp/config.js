@@ -13,7 +13,7 @@ var distVendors = path.join(dist, 'assets', 'vendors')
 var nodeModules = './node_modules'
 var bowerComponents = path.join(src, 'app/bower_components')
 
-var dependencies = ['react', 'react-bootstrap']
+var dependencies = ['react', 'react-router', 'react-bootstrap', 'react-router-bootstrap']
 
 module.exports = {
   browserSync: {
@@ -38,6 +38,10 @@ module.exports = {
       }
     }
   },
+  symlink: [
+    {src: nodeModules, dest: dest},
+    {src: src, dest: dest}
+  ],
   sass: {
     src: src + '/sass/**/*.{sass,scss}',
     dest: destAssets,
@@ -61,11 +65,11 @@ module.exports = {
     // A separate bundle will be generated for each
     // bundle config in the list below
     bundleConfigs: [{
-      entries: src + '/app/main',
+      entries: src + '/app/index.js',
       dest: destAssets,
       transform: [
-        ['envify'],
-        ['reactify', {harmony: true}]
+        ['reactify', {harmony: true}],
+        ['envify']
       ],
       outputName: 'app.js',
       // Additional file extensions to make optional

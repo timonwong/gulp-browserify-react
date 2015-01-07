@@ -1,3 +1,5 @@
+var fs = require('fs')
+var path = require('path')
 var gulp = require('gulp')
 var browserify = require('browserify')
 var browserSync = require('browser-sync')
@@ -5,6 +7,7 @@ var watchify = require('watchify')
 var bundleLogger = require('../util/bundleLogger')
 var handleErrors = require('../util/handleErrors')
 var source = require('vinyl-source-stream')
+var mold = require('mold-source-map')
 var config = require('../config').browserify
 var _ = require('lodash')
 
@@ -36,9 +39,34 @@ var browserifyTask = function (callback) {
       // Log when bundling starts
       bundleLogger.start(bundleConfig.outputName)
 
-      return b.bundle()
+      var bundleStream = b.bundle()
         // Report compile errors
         .on('error', handleErrors)
+
+      if (devMode) {
+        var jsRoot = path.resolve('.')
+        var mapFilePath = path.join(bundleConfig.dest, bundleConfig.outputName + '.map')
+        var mapFileUrlCommentSync = function(sourcemap) {
+          // Because reactify returns transformed sourcemap, here we add the hack to get around of it
+          // Note that this should be used with symlink task
+          sourcemap.sourceRoot('/')
+          sourcemap.mapSources(mold.mapPathRelativeTo(jsRoot))
+          sourcemap.file(bundleConfig.outputName)
+          // Exclude sourcesContent, because we don't need it anymore
+          sourcemap.sourcemap.setProperty('sourcesContent', undefined)
+
+          // write map file and return a sourceMappingUrl that points to it
+          fs.writeFileSync(mapFilePath, sourcemap.toJSON(2), 'utf-8')
+          // Giving just a filename instead of a path will cause the browser to look for the map file
+          // right next to where it loaded the bundle from.
+          // Therefore this way the map is found no matter if the page is served or opened from the filesystem.
+          return '//@ sourceMappingURL=' + path.basename(mapFilePath)
+        }
+
+        bundleStream = bundleStream.pipe(mold.transform(mapFileUrlCommentSync))
+      }
+
+      return bundleStream
         // Use vinyl-source-stream to make the
         // stream gulp compatible. Specify the
         // desired output filename here.
