@@ -1,6 +1,6 @@
 ```bash
-# We need to install bower globally
-npm install -g bower
+# We need to install bower and gulp globally
+npm install -g bower gulp
 # Install bootstrap styles, etc
 bower install
 
