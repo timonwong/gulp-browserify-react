@@ -1,4 +1,6 @@
+var fs = require('fs')
 var path = require('path')
+var _ = require('lodash')
 
 var dest = './build'
 var dist = './dist'
@@ -13,7 +15,7 @@ var distVendors = path.join(dist, 'assets', 'vendors')
 var nodeModules = './node_modules'
 var bowerComponents = path.join(src, 'bower_components')
 
-var dependencies = ['react', 'react-router', 'react-bootstrap', 'react-router-bootstrap']
+var dependencies = _.keys(JSON.parse(fs.readFileSync('package.json')).dependencies)
 
 module.exports = {
   browserSync: {
